@@ -1,0 +1,55 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
+
+export default function SportingStore() {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+
+  const products = [
+    { name: "Elite Baseball Bat", price: "$299", desc: "Premium alloy for max performance." },
+    { name: "Pro Basketball Hoop", price: "$799", desc: "Adjustable height, ultra-stable base." },
+    { name: "Advanced Pitching Machine", price: "$1499", desc: "Perfect for training and teams." },
+    { name: "Golf Rangefinder X2", price: "$249", desc: "Accurate yardage with AI assist." }
+  ];
+
+  const search = () => {
+    const r = products.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
+    setResults(r);
+  };
+
+  return (
+    <div className="min-h-screen p-10 bg-gray-100">
+      <motion.h1 
+        initial={{ opacity: 0, y: -20 }} 
+        animate={{ opacity: 1, y: 0 }}
+        className="text-4xl font-bold mb-6 text-center"
+      >
+        Apex Sporting Goods
+      </motion.h1>
+
+      <div className="max-w-xl mx-auto mb-10 flex gap-3">
+        <Input placeholder="Search for gear..." value={query} onChange={(e) => setQuery(e.target.value)} />
+        <Button onClick={search}>Search</Button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {(results.length ? results : products).map((p, i) => (
+          <motion.div key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <Card className="rounded-2xl shadow-lg">
+              <CardContent className="p-5">
+                <h2 className="text-xl font-semibold mb-2">{p.name}</h2>
+                <p className="mb-2 text-gray-600">{p.desc}</p>
+                <p className="font-bold text-lg mb-3">{p.price}</p>
+                <Button className="w-full">Buy Now</Button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
