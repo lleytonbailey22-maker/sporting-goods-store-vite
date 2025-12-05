@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Apex Sporting Goods</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+{
+  "name": "sporting-goods-store-vite",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "vite": "^5.1.0"
+  }
+}# sporting-goods-store-vite
+
+This is a minimal Vite + React demo store for *Apex Sporting Goods* (no backend, demo only).
+
+## Features
+- React front-end with search + product cards
+- Ready to connect to payments (Stripe) and supplier API
+- Deploy to Vercel or Netlify
+
+## Run locally
+1. Install Node.js (>=16)
+2. npm install
+3. npm run dev
+4. Open the printed local URL (usually http://localhost:5173)
+
+## Deploy to Vercel
+1. Push this repo to GitHub
+2. Sign in to Vercel and import the repository
+3. Vercel will detect Viimport React from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App'
+import './styles.css'
+
+createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
+
+/* Basic styling for the demo store */
+:root{
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --accent:#0b69ff;
+  --muted:#6b7280;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:#0f172a;background:var(--bg)}
+.page{min-height:100vh}
+.hero{padding:48px 20px;text-align:center}
+.hero h1{margin:0;font-size:2.25rem}
+.tag{color:var(--muted);margin-top:8px}
+
+.container{max-width:1000px;margin:0 auto;padding:20px}
+
+.searchRow{display:flex;gap:8px;align-items:center;margin-bottom:20px}
+.searchInput{flex:1;padding:12px;border-radius:8px;border:1px solid #e6e9ef}
+.btn{padding:10px 14px;border-radius:8px;border:none;background:var(--accent);color:white;cursor:pointer}
+.btn.alt{background:#e2e8f0;color:#0f172a}
+.btn.full{width:100%;margin-top:12px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 4px 12px rgba(15,23,42,0.06);display:flex;flex-direction:column;align-items:stretch}
+.imgPlaceholder{height:140px;background:linear-gradient(90deg,#eef2ff,#fff);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#94a3b8;margin-bottom:12px}
+h2{margin:0 0 8px 0;font-size:1.05rem}
+.desc{color:var(--muted);flex:1}
+.price{font-weight:700;margin-top:12px}
+
+.footer{margin-top:30px;text-align:center;color:var(--muted)}
+.noResults{padding:20px;text-align:center;color:var(--muted)}
+
+import React, {useState} from 'react'
+
+const initialProducts = [
+  { id: 1, name: "Elite Baseball Bat", price: 299, desc: "Premium alloy for max performance." },
+  { id: 2, name: "Pro Basketball Hoop", price: 799, desc: "Adjustable height, ultra-stable base." },
+  { id: 3, name: "Advanced Pitching Machine", price: 1499, desc: "Perfect for training and teams." },
+  { id: 4, name: "Golf Rangefinder X2", price: 249, desc: "Accurate yardage with AI assist." }
+]
+
+export default function App(){
+  const [query, setQuery] = useState('')
+  const [results, setResults] = useState(initialProducts)
+
+  function search(e){
+    e?.preventDefault()
+    const q = query.trim().toLowerCase()
+    if(!q){
+      setResults(initialProducts)
+      return
+    }
+    const r = initialProducts.filter(p => p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q))
+    setResults(r)
+  }
+
+  function buyNow(p){
+    alert(`Buy now clicked for: ${p.name} — This demo does not process payments. Use Stripe/Shopify for payments.`)
+  }
+
+  return (
+    <div className="page">
+      <header className="hero">
+        <h1>Apex Sporting Goods</h1>
+        <p className="tag">AI-powered gear finder — high-ticket sporting equipment, no inventory.</p>
+      </header>
+
+      <main className="container">
+        <form className="searchRow" onSubmit={search}>
+          <input
+            className="searchInput"
+            placeholder="Search for gear (e.g., baseball, pitching machine, golf)"
+            value={query}
+            onChange={(e)=>setQuery(e.target.value)}
+          />
+          <button className="btn" type="submit">Search</button>
+          <button className="btn alt" type="button" onClick={() => { setQuery(''); setResults(initialProducts); }}>Reset</button>
+        </form>
+
+        <section className="grid">
+          {results.length === 0 && <div className="noResults">No products found.</div>}
+          {results.map(p => (
+            <article key={p.id} className="card">
+              <div className="imgPlaceholder">Image</div>
+              <h2>{p.name}</h2>
+              <p className="desc">{p.desc}</p>
+              <div className="price">${p.price.toFixed(2)}</div>
+              <button className="btn full" onClick={()=>buyNow(p)}>Buy Now</button>
+            </article>
+          ))}
+        </section>
+
+        <footer className="footer">
+          <small>Demo store — connect suppliers and payments to go live.</small>
+        </footer>
+      </main>
+    </div>
+  )
+}
+te and deploy automatically
+
